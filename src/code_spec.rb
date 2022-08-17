@@ -35,6 +35,12 @@ describe Code do
     end
   end
 
+  describe "#to_s" do
+    it "works" do
+      expect(Code.from_text("abcd").to_s).to eq("A B C D")
+    end
+  end
+
   describe "#value" do
     it "returns value" do
       expect(Code.new(0, 1, 2, 3).value).to eq([0, 1, 2, 3])

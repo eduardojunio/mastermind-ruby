@@ -18,6 +18,10 @@ class Code
     value == code.value
   end
 
+  def to_s
+    value.map { |e| get_character(e) }.join(" ")
+  end
+
   def get_hint(code)
     hint = []
     code.value.each_with_index do |e, i|
@@ -30,5 +34,11 @@ class Code
       end
     end
     hint.sort.reverse
+  end
+
+  private
+
+  def get_character(element)
+    (65 + element).chr
   end
 end

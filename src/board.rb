@@ -1,5 +1,5 @@
 class Board
-  attr_reader :rows
+  attr_reader :rows, :secret
 
   def initialize(secret)
     @rows = []
@@ -15,10 +15,6 @@ class Board
   end
 
   private
-
-  def secret
-    @secret
-  end
 
   def any_right_guess?
     rows.any? do |row|
