@@ -46,7 +46,7 @@ describe Code do
       it "returns the correct hint" do
         code1 = Code.from_text("efgh")
         code2 = Code.from_text("abgh")
-        expect(code1.get_hint(code2)).to eq([0, 0, 2, 2])
+        expect(code1.get_hint(code2)).to eq([2, 2, 0, 0])
       end
     end
 

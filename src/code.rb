@@ -29,6 +29,6 @@ class Code
         hint.push(0)
       end
     end
-    hint
+    hint.sort.reverse
   end
 end
