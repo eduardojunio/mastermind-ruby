@@ -1,4 +1,4 @@
-require "./code"
+require "./src/code"
 
 describe Code do
   describe "::from_text" do
