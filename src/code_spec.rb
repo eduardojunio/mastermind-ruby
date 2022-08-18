@@ -19,6 +19,32 @@ describe Code do
         expect(Code.from_text("   e    F    g   h    ").value).to eq([4, 5, 6, 7])
       end
     end
+
+    context "with invalid input" do
+      context "when entering too few options" do
+        it "raises an error" do
+          expect { Code.from_text("a") }.to raise_error(ArgumentError, "Invalid code")
+        end
+      end
+
+      context "when entering too much options" do
+        it "raises an error" do
+          expect { Code.from_text("abcde") }.to raise_error(ArgumentError, "Invalid code")
+        end
+      end
+
+      context "when entering nothing" do
+        it "raises an error" do
+          expect { Code.from_text("") }.to raise_error(ArgumentError, "Invalid code")
+        end
+      end
+
+      context "when entering duplicate characters" do
+        it "raises an error" do
+          expect { Code.from_text("abca") }.to raise_error(ArgumentError, "Invalid code")
+        end
+      end
+    end
   end
 
   describe "#==" do

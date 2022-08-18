@@ -14,8 +14,6 @@ class Board
     rows.length == 10 || any_right_guess?
   end
 
-  private
-
   def any_right_guess?
     rows.any? do |row|
       code = row.first

@@ -11,6 +11,8 @@ class Code
   attr_reader :value
 
   def initialize(*elements)
+    raise ArgumentError, "Invalid code" unless valid?(elements)
+
     @value = elements
   end
 
@@ -40,5 +42,9 @@ class Code
 
   def get_character(element)
     (65 + element).chr
+  end
+
+  def valid?(elements)
+    elements.length == 4 && elements.uniq.length == 4
   end
 end
