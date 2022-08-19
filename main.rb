@@ -1,4 +1,4 @@
 require("./src/game")
 
 game = Game.new
-game.loop
+game.game_loop

@@ -1,3 +1,5 @@
+require("forwardable")
+
 require("./src/board")
 require("./src/code")
 require("./src/player")
@@ -6,60 +8,45 @@ require("./src/keyboard_input")
 require("./src/ai_input")
 
 class Game
+  extend Forwardable
+
+  def_delegators :printer, :print_intro, :print_space, :print_game, :print_text, :print_name_prompt, :print_guess_prompt
+
   def initialize
     @keyboard_input = KeyboardInput.new
-  end
-
-  def loop
-    system("clear")
-    show_intro
-    print_space
-    player = Player.new(get_player_name, keyboard_input)
     computer = Player.new("Computer", AIInput.new)
     secret = Code.from_text(computer.get_code)
-    board = Board.new(secret)
+    @board = Board.new(secret)
+    @printer = Printer.new(board)
+  end
+
+  def game_loop
+    clear_screen
+    print_intro
+    print_space
+    @player = Player.new(get_player_name, keyboard_input)
     until board.game_ended?
       begin
-        system("clear")
-        show_intro
+        clear_screen
+        print_game
         print_space
-        Printer.print_board(board)
-        print_space
-        Printer.print_options
-        print_space
-        Printer.print_guess_prompt
-        guess = Code.from_text(player.get_code)
+        guess = get_guess
       rescue => exception
-        Printer.show("#{exception}!")
+        print_text "#{exception}!"
         keyboard_input.get
         retry
       end
       board.make_guess(guess)
     end
-    system("clear")
+    clear_screen
+    print_game(with_secret: true)
+    print_space
     if board.any_right_guess?
-      show_intro
-      print_space
-      Printer.print_secret(board)
-      Printer.print_board(board)
-      print_space
-      player_won = <<~SHOW
-        Congratulations #{player.name.upcase}, you won!!!!!!!!
-      SHOW
-      Printer.show player_won
-      print_space
+      print_text "Congratulations #{player.name.upcase}, you won!!!!!!!!"
     else
-      show_intro
-      print_space
-      Printer.print_secret(board)
-      Printer.print_board(board)
-      print_space
-      player_lost = <<~SHOW
-        You lost! Try again...
-      SHOW
-      Printer.show player_lost
-      print_space
+      print_text "You lost! Try again..."
     end
+    print_space
   end
 
   private
@@ -68,22 +55,29 @@ class Game
     @keyboard_input
   end
 
-  def show_intro
-    intro = <<~SHOW
-      --------------------------------------
-      Mastermind, written by Eduardo in Ruby
-                      v1.0.0                
-      --------------------------------------
-    SHOW
-    Printer.show(intro)
+  def board
+    @board
+  end
+
+  def player
+    @player
+  end
+
+  def printer
+    @printer
   end
 
   def get_player_name
-    Printer.print_name_prompt
+    print_name_prompt
     keyboard_input.get
   end
 
-  def print_space
-    Printer.show "\n"
+  def get_guess
+    print_guess_prompt
+    Code.from_text(player.get_code)
+  end
+
+  def clear_screen
+    system("clear")
   end
 end
